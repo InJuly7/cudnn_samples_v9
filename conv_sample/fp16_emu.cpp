@@ -57,8 +57,7 @@
 // Host functions for converting between FP32 and FP16 formats
 // Paulius Micikevicius (pauliusm@nvidia.com)
 
-half1
-cpu_float2half_rn(float f) {
+half1 cpu_float2half_rn(float f) {
     unsigned x = *((int *)(void *)(&f));
     unsigned u = (x & 0x7fffffff), remainder, shift, lsb, lsb_s1, lsb_m1;
     unsigned sign, exponent, mantissa;
@@ -114,8 +113,7 @@ cpu_float2half_rn(float f) {
     return reinterpret_cast<half1 &>(hr);
 }
 
-float
-cpu_half2float(half1 h) {
+float cpu_half2float(half1 h) {
     STATIC_ASSERT(sizeof(int) == sizeof(float));
 
     __half_raw hr = reinterpret_cast<__half_raw &>(h);
@@ -147,8 +145,7 @@ cpu_half2float(half1 h) {
     return reinterpret_cast<float &>(temp);
 }
 
-float
-convertToFloat(void *x, cudnnDataType_t dataType) {
+float convertToFloat(void *x, cudnnDataType_t dataType) {
     if (dataType == CUDNN_DATA_HALF) {
         half1 h = *static_cast<half1 *>(x);
         return cpu_half2float(h);
@@ -164,8 +161,7 @@ convertToFloat(void *x, cudnnDataType_t dataType) {
     }
 }
 
-void
-convertFromFloat(float *x, cudnnDataType_t dataType, void *result) {
+void convertFromFloat(float *x, cudnnDataType_t dataType, void *result) {
     if (x == NULL) {
         return;
     }
